@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - MangoBank</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+               <a href="index.html" class="bank-logo" id="logo-home-link"><h2><i class="fas fa-university"></i> MangoBank</h2></a>
+            </div>
+            <div class="user-info">
+                <div class="user-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <h3 class="user-name" id="sidebar-user-name"></h3>
+                <p class="user-email" id="sidebar-user-email"></p>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active" data-page="dashboard">
+                        <a href="#dashboard"><i class="fas fa-home"></i> Dashboard</a>
+                    </li>
+                    <li data-page="transactions">
+                        <a href="#transactions"><i class="fas fa-exchange-alt"></i> Transactions</a>
+                    </li>
+                    <li data-page="cards">
+                        <a href="#cards"><i class="fas fa-credit-card"></i> Cards</a>
+                    </li>
+                    <li data-page="profile">
+                        <a href="#profile"><i class="fas fa-user-cog"></i> Profile</a>
+                    </li>
+                    <li data-page="settings">
+                        <a href="#settings"><i class="fas fa-cog"></i> Settings</a>
+                    </li>
+                    <li class="logout" id="logout-btn">
+                        <a href="index.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="dashboard-header">
+                <div class="header-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search...">
+                    <button class="search-btn"><i class="fas fa-arrow-right"></i></button>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-icon"><i class="far fa-bell"></i></button>
+                    <button class="btn-icon"><i class="far fa-envelope"></i></button>
+                </div>
+            </header>
+
+            <!-- Dashboard Content with Page Sections -->
+            <div class="page-content">
+                <!-- Dashboard Page -->
+                <div class="page-section active" id="dashboard-page">
+                    <h1 class="page-title">Dashboard</h1>
+                    <p class="welcome-message" id="welcome-message">Welcome back! Here's your financial summary.</p>
+
+                    <!-- Account Overview Cards -->
+                    <section class="account-overview">
+                        <div class="card balance-card">
+                            <div class="card-icon">
+                                <i class="fas fa-wallet"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Current Balance</h3>
+                                <p class="balance" id="current-balance">$0.00</p>
+                                <span class="card-subtitle">Available</span>
+                            </div>
+                        </div>
+                        <div class="card income-card">
+                            <div class="card-icon">
+                                <i class="fas fa-arrow-down"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Income</h3>
+                                <p class="amount" id="income-amount">$0.00</p>
+                                <span class="card-subtitle">This Month</span>
+                            </div>
+                        </div>
+                        <div class="card expense-card">
+                            <div class="card-icon">
+                                <i class="fas fa-arrow-up"></i>
+                            </div>
+                            <div class="card-content">
+                                <h3>Expenses</h3>
+                                <p class="amount" id="expense-amount">$0.00</p>
+                                <span class="card-subtitle">This Month</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Money Transfer Section -->
+                    <section class="money-transfer">
+                        <div class="section-header">
+                            <h2><i class="fas fa-exchange-alt"></i> Transfer Money</h2>
+                        </div>
+                        <div class="transfer-container">
+                            <form id="transferForm" class="transfer-form">
+                                <div class="form-group">
+                                    <label for="recipient">Recipient Account</label>
+                                    <input type="text" id="recipient" name="recipient" placeholder="Enter account number or email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="amount">Amount</label>
+                                    <div class="amount-input">
+                                        <span class="currency">$</span>
+                                        <input type="number" id="amount" name="amount" placeholder="0.00" min="1" step="0.01" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="transferNote">Note (Optional)</label>
+                                    <input type="text" id="transferNote" name="transferNote" placeholder="Add a note">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Send Money</button>
+                            </form>
+                        </div>
+                    </section>
+
+                    <!-- Recent Transactions -->
+                    <section class="recent-transactions">
+                        <div class="section-header">
+                            <h2><i class="fas fa-history"></i> Recent Transactions</h2>
+                            <a href="#" class="view-all">View All</a>
+                        </div>
+                        <div class="transactions-table-container">
+                            <table class="transactions-table">
+                                <thead>
+                                    <tr>
+                                        <th>Transaction</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transactions-table-body">
+                                    <tr class="loading-row">
+                                        <td colspan="4" class="text-center">
+                                            <div class="loading-spinner">
+                                                <i class="fas fa-spinner fa-spin"></i> Loading transactions...
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Transactions Page -->
+                <div class="page-section" id="transactions-page">
+                    <h1 class="page-title">Transaction History</h1>
+                    <p>View all your transactions in one place.</p>
+                    
+                    <div class="transactions-filter">
+                        <div class="form-group">
+                            <label for="transaction-type">Filter by type</label>
+                            <select id="transaction-type" class="form-control">
+                                <option value="all">All Transactions</option>
+                                <option value="incoming">Incoming</option>
+                                <option value="outgoing">Outgoing</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="transaction-date-range">Date range</label>
+                            <select id="transaction-date-range" class="form-control">
+                                <option value="all">All time</option>
+                                <option value="30days" selected>Last 30 days</option>
+                                <option value="6months">Last 6 months</option>
+                                <option value="1year">Last year</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" id="apply-filters">Apply Filters</button>
+                    </div>
+                    
+                    <div class="transactions-table-container">
+                        <table class="transactions-table">
+                            <thead>
+                                <tr>
+                                    <th>Transaction</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="full-transactions-table-body">
+                                <tr>
+                                    <td colspan="4" class="text-center">
+                                        <div class="loading-spinner">
+                                            <i class="fas fa-spinner fa-spin"></i> Loading transactions...
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Cards Page -->
+                <div class="page-section" id="cards-page">
+                    <div class="page-header">
+                        <div class="page-title-section">
+                            <h1 class="page-title">Your Cards</h1>
+                            <p>Manage your credit and debit cards.</p>
+                        </div>
+                        <button id="add-card-btn" class="btn btn-primary"> Add New Card</button>
+                    </div>
+                    <div class="cards-container">
+                        <div class="card credit-card">
+                            <div class="card-front">
+                                <div class="card-logo">MangoBank</div>
+                                <div class="card-type"><i class="fab fa-cc-visa"></i></div>
+                                <div class="card-number">**** **** **** 2800</div>
+                                <div class="card-holder">
+                                    <span class="label">Card Holder</span>
+                                    <span class="name" id="card-holder-name"></span>
+                                </div>
+                                <div class="card-expires">
+                                    <span class="label">Expires</span>
+                                    <span>07/28</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card-actions">
+                            <button class="btn btn-outline"><i class="fas fa-eye"></i> View Details</button>
+                            <button class="btn btn-outline"><i class="fas fa-money-check-alt"></i> Request New Card</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Profile Page -->
+                <div class="page-section" id="profile-page">
+                    <h1 class="page-title">Profile Settings</h1>
+                    <p>Manage your personal information and account settings.</p>
+                    
+                    <div class="profile-container">
+                        <div class="profile-avatar">
+                            <div class="avatar-preview">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <button class="btn btn-outline">Change Photo</button>
+                        </div>
+                        
+                        <div class="profile-form">
+                            <form id="profile-update-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="profile-firstname">Username</label>
+                                        <input type="text" id="profile-firstname" value="">
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="profile-email">Email Address</label>
+                                    <input type="email" id="profile-email" value="">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="profile-phone">Phone Number</label>
+                                    <input type="tel" id="profile-phone" value="">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="profile-address">Address</label>
+                                    <input id="profile-address" value="Mun. Bălți">
+                                </div>
+                                
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                    <button type="button" class="btn btn-outline">Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Settings Page -->
+                <div class="page-section" id="settings-page">
+                    <h1 class="page-title">Account Settings</h1>
+                    <p>Customize your account preferences and security settings.</p>
+                    
+                    <div class="settings-container">
+                        <div class="settings-section">
+                            <h3>Security Settings</h3>
+                            
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Change Password</h4>
+                                    <p>Update your account password regularly to maintain security</p>
+                                </div>
+                                <button class="btn btn-outline">Change</button>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Two-Factor Authentication</h4>
+                                    <p>Add an extra layer of security to your account</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Login Notifications</h4>
+                                    <p>Get notified when someone logs into your account</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="settings-section">
+                            <h3>Notification Preferences</h3>
+                            
+                            <div class="setting-item">
+                                <div class="setting-info">
+                                    <h4>Notification Settings</h4>
+                                    <p>Manage your notification preferences</p>
+                                </div>
+                                <button class="btn btn-outline" id="notification-settings-btn">Configure</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add New Card Modal -->
+    <div id="add-card-modal" class="modal-container" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Add New Card</h3>
+                <button class="modal-close" onclick="hideAddCardModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="add-card-form">
+                    <div class="form-group">
+                        <label for="card-type">Card Type</label>
+                        <select id="card-type" class="form-control" required>
+                            <option value="">Select Card Type</option>
+                            <option value="credit">Credit Card</option>
+                            <option value="debit">Debit Card</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="card-number">Card Number</label>
+                        <input type="text" id="card-number" class="form-control" placeholder="XXXX XXXX XXXX XXXX" maxlength="19" required>
+                        <small class="form-text">Enter your card number (spaces will be added automatically)</small>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="expiry-date">Expiry Date</label>
+                            <input type="text" id="expiry-date" class="form-control" placeholder="MM/YY" maxlength="5" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cvv">CVV</label>
+                            <input type="text" id="cvv" class="form-control" placeholder="XXX" maxlength="3" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="name-on-card">Name on Card</label>
+                        <input type="text" id="name-on-card" class="form-control" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Add Card</button>
+                        <button type="button" class="btn btn-outline modal-cancel" onclick="hideAddCardModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Request New Card Modal -->
+    <div id="request-card-modal" class="modal-container" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Request Virtual Card</h3>
+                <button class="modal-close" onclick="hideRequestCardModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="request-card-form">
+                    <div class="form-group">
+                        <label for="request-reason">Reason for request</label>
+                        <select id="request-reason" class="form-control" required>
+                            <option value="">Select a reason</option>
+                            <option value="new">New virtual card</option>
+                            <option value="expired">Replace expired card</option>
+                            <option value="security">Security concerns</option>
+                            <option value="other">Other reason</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="other-reason-group" style="display: none;">
+                        <label for="other-reason">Please specify</label>
+                        <textarea id="other-reason" class="form-control" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="virtual-card-info">
+                        <i class="fas fa-info-circle"></i>
+                        <p>Your virtual card will be instantly available in your account after approval. You can use it for online payments and mobile wallet services.</p>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Request Virtual Card</button>
+                        <button type="button" class="btn btn-outline modal-cancel" onclick="hideRequestCardModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Settings Modal -->
+    <div id="notification-settings-modal" class="modal-container" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Notification Settings</h3>
+                <button class="modal-close" onclick="hideNotificationSettingsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="notification-settings-form">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Email Notifications</h4>
+                            <p>Receive account updates and alerts via email</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="email-notifications" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Push Notifications</h4>
+                            <p>Receive notifications on your mobile device</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="push-notifications">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Transaction Alerts</h4>
+                            <p>Get notified about account transactions</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="transaction-alerts" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Security Alerts</h4>
+                            <p>Get notified about security-related events</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="security-alerts" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h4>Marketing Updates</h4>
+                            <p>Receive information about new services and promotions</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="marketing-updates">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <button type="button" class="btn btn-outline modal-cancel" onclick="hideNotificationSettingsModal()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

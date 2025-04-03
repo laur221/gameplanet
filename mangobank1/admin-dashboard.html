@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - MangoBank</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Admin Sidebar -->
+        <div class="admin-sidebar">
+            <div class="admin-logo">
+                <span class="admin-logo-icon"><i class="fas fa-university"></i></span>
+                <h1 style="color: #FF8A00;">MangoBank</h1>
+            </div>
+            
+            <!-- Admin Profile -->
+            <div class="user-profile">
+                <div class="avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+                <p class="user-name" id="admin-name">Admin</p>
+                <p class="user-email" id="admin-email">admin@mangobank.com</p>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="active"><a href="#dashboard-section"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                    <li><a href="#users-section"><i class="fas fa-users"></i> Users</a></li>
+                    <li><a href="#transactions-section"><i class="fas fa-exchange-alt"></i> Transactions</a></li>
+                    <li><a href="#settings-section"><i class="fas fa-cog"></i> Settings</a></li>
+                    <li><a id="logout-btn" href="js/"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                </ul>
+            </nav>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="admin-content">
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="admin-section active-section">
+                <div class="section-header">
+                    <h2>Dashboard</h2>
+                    <div class="section-actions">
+                        <button class="admin-btn admin-btn-primary" id="export-data-btn">
+                            <i class="fas fa-download"></i> Export Data
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Stats Cards -->
+                <div class="admin-card-grid">
+                    <div class="admin-card card-users">
+                        <div class="admin-card-header">
+                            <h3>Total Users</h3>
+                            <div class="admin-card-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                        <div class="admin-card-value total-users" id="total-users-count">0</div>
+                        <div class="admin-card-label">Registered accounts</div>
+                    </div>
+                    
+                    <div class="admin-card card-transactions">
+                        <div class="admin-card-header">
+                            <h3>Transactions</h3>
+                            <div class="admin-card-icon">
+                                <i class="fas fa-exchange-alt"></i>
+                            </div>
+                        </div>
+                        <div class="admin-card-value total-transactions" id="total-transactions-count">0</div>
+                        <div class="admin-card-label">Total processed</div>
+                    </div>
+                    
+                    <div class="admin-card card-balance">
+                        <div class="admin-card-header">
+                            <h3>Total Balance</h3>
+                            <div class="admin-card-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                        </div>
+                        <div class="admin-card-value total-balance" id="total-balance-amount">$0.00</div>
+                        <div class="admin-card-label">Across all accounts</div>
+                    </div>
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="admin-form-group">
+                    <div class="admin-form-section">
+                        <h3>Recent Activity</h3>
+                        <div class="activity-list" id="activity-list">
+                            <!-- Activity items will be loaded dynamically from the API -->
+                            <div class="loading-spinner">
+                                <i class="fas fa-spinner fa-spin"></i> Loading recent activity...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="admin-form-group">
+                    <div class="admin-form-section">
+                        <h3>Quick Actions</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fund-user-email">Add Funds to User</label>
+                                <input type="email" id="fund-user-email" class="form-control" placeholder="User Email">
+                            </div>
+                            <div class="form-group">
+                                <label for="fund-amount">Amount</label>
+                                <input type="number" id="fund-amount" class="form-control" placeholder="Amount" min="1" step="0.01">
+                            </div>
+                            <div class="form-group" style="display: flex; align-items: flex-end;">
+                                <button id="add-funds-btn" class="admin-btn admin-btn-primary">
+                                    <i class="fas fa-plus-circle"></i> Add Funds
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Users Section -->
+            <section id="users-section" class="admin-section">
+                <div class="section-header">
+                    <h2>User Management</h2>
+                    <div class="section-actions">
+                        <div class="form-group" style="width: 250px;">
+                            <input type="text" class="form-control" placeholder="Search by name or email..." id="user-search">
+                        </div>
+                        <button class="admin-btn admin-btn-secondary" id="search-users-btn">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                        <button class="admin-btn admin-btn-primary" id="create-user-btn">
+                            <i class="fas fa-user-plus"></i> Create User
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Users Table -->
+                <div class="admin-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Balance</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                            <!-- Users will be loaded dynamically from the API -->
+                            <tr class="loading-row">
+                                <td colspan="5" class="text-center">
+                                    <div class="loading-spinner">
+                                        <i class="fas fa-spinner fa-spin"></i> Loading users...
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- Transactions Section -->
+            <section id="transactions-section" class="admin-section">
+                <div class="section-header">
+                    <h2>Transaction History</h2>
+                    <div class="section-actions">
+                        <button class="admin-btn admin-btn-secondary" id="filter-transactions">
+                            <i class="fas fa-filter"></i> Filter
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Transactions Table -->
+                <div class="admin-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Type</th>
+                                <th>Details</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactions-table-body">
+                            <!-- Transactions will be loaded dynamically from the API -->
+                            <tr class="loading-row">
+                                <td colspan="6" class="text-center">
+                                    <div class="loading-spinner">
+                                        <i class="fas fa-spinner fa-spin"></i> Loading transactions...
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- Settings Section -->
+            <section id="settings-section" class="admin-section">
+                <div class="section-header">
+                    <h2>System Settings</h2>
+                    <div class="section-actions">
+                        <button class="admin-btn admin-btn-primary save-settings-btn">
+                            <i class="fas fa-save"></i> Save Settings
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Settings Form -->
+                <div class="admin-form-group">
+                    <div class="admin-form-section">
+                        <h3>Account Settings</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="default-balance">Default Starting Balance</label>
+                                <input type="number" id="default-balance" class="form-control" min="0" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label for="max-transfer">Maximum Transfer Amount</label>
+                                <input type="number" id="max-transfer" class="form-control" min="0" step="0.01">
+                            </div>
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" id="allow-registration" class="form-control" style="width: auto;">
+                            <label for="allow-registration">Allow New Registrations</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- System Controls -->
+                <div class="admin-form-group">
+                    <div class="admin-form-section">
+                        <h3>System Controls</h3>
+                        <p>Warning: These actions cannot be undone.</p>
+                        <button id="reset-system" class="admin-btn admin-btn-danger">
+                            <i class="fas fa-exclamation-triangle"></i> Reset System (Remove All Users)
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    
+    <script src="js/script.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>
